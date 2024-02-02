@@ -81,7 +81,7 @@ function GenerateGrid(gridSize) {
   return gridEle;
 }
 
-function Game({ isplaying, startTime, endGame, gridSize = 4 }) {
+function Game({ isplaying, startTime, endGame, gridSize, setGridSize }) {
   const [grid, setGrid] = useState(GenerateGrid(gridSize));
   const [selected, setSelected] = useState([]);
 
@@ -95,14 +95,29 @@ function Game({ isplaying, startTime, endGame, gridSize = 4 }) {
 
   return (
     <div className=" container mx-auto max-w-max">
-      <button
-        className=" mb-2 rounded p-2 bg-green-400 text-black"
-        onClick={() => {
-          setGrid(GenerateGrid(gridSize));
-        }}
-      >
-        Reset Game
-      </button>
+      <div className=" flex items-center justify-between">
+        <button
+          className=" mb-2 rounded p-2 bg-green-400 text-black"
+          onClick={() => {
+            setGrid(GenerateGrid(gridSize));
+          }}
+        >
+          Reset Game
+        </button>
+        <div className="flex gap-2">
+          <label htmlFor="">Size</label>
+          <select
+            className=" text-black rounded px-1 bg-slate-300"
+            onChange={(event) => {
+              setGridSize(event.target.value);
+              setGrid(GenerateGrid(event.target.value));
+            }}
+          >
+            <option value="4">4</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+      </div>
       <div className={"grid gap-2 " + `grid-cols-${gridSize}`}>
         {grid.map((ele, index) => {
           return (
@@ -165,18 +180,21 @@ function Card({
   const flipped = state !== STATES.BACK;
   return (
     <button
+      disabled={state === STATES.MATCHED}
       id={"card-" + index}
       className={
         GetCardSize(gridSize) +
         " border rounded " +
-        (state === STATES.MATCHED ? "border-orange-400" : "border-white")
+        (state === STATES.MATCHED
+          ? "border-orange-600 opacity-50"
+          : "border-white")
       }
       onClick={handelClick}
     >
       {flipped ? (
         <div>
           {image ? (
-            <img className="w-full rounded-xl" src={image} alt="img" />
+            <img className="w-full rounded" src={image} alt="img" />
           ) : (
             <p className=" text-3xl">{text}</p>
           )}

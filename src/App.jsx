@@ -5,6 +5,7 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [gridSize, setGridSize] = useState(4);
 
   return (
     <>
@@ -21,6 +22,8 @@ function App() {
       <Game
         isplaying={isPlaying}
         startTime={startTime}
+        gridSize={gridSize}
+        setGridSize={setGridSize}
         endTime={endTime}
         endGame={() => {
           setIsPlaying(false);
