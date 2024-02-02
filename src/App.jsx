@@ -34,6 +34,7 @@ function App() {
           setEndTime(Date.now());
         }}
       />
+      <a classname="mt-5" href="https://www.freepik.com/free-vector/rope-font-nautical-alphabet-ropes-hand-drawn-letters-alphabet-typographic-vintage-rope-string-typeface_13422926.htm#query=cursive%20letter&position=2&from_view=keyword&track=ais&uuid=329c1631-058b-4d65-b4c4-68c58c575c12">Images by macrovector</a> on Freepik
     </>
   );
 }
