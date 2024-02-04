@@ -28,6 +28,7 @@ import z from "../assets/images/z.jpg";
 import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import { STATES, ShuffelArray } from "../Constants";
+import { TimerText } from "../Timer";
 
 export const CHARACTERS = [
   { text: "a", image: a, value: nanoid() },
@@ -81,7 +82,14 @@ function GenerateGrid(gridSize) {
   return gridEle;
 }
 
-function Game({ isplaying, endGame, gridSize }) {
+function Game({
+  isplaying,
+  isfirstPlay,
+  endGame,
+  gridSize,
+  startTime,
+  endTime,
+}) {
   const [grid, setGrid] = useState(GenerateGrid(gridSize));
   const [selected, setSelected] = useState([]);
 
@@ -100,7 +108,7 @@ function Game({ isplaying, endGame, gridSize }) {
   // grid-cols-6 grid-cols-4
 
   return (
-    <div className=" container mx-auto max-w-max">
+    <div className=" container mx-auto max-w-max relative">
       <div className={"grid gap-2 " + `grid-cols-${gridSize}`}>
         {grid.map((ele, index) => {
           return (
@@ -144,6 +152,28 @@ function Game({ isplaying, endGame, gridSize }) {
           );
         })}
       </div>
+      {isplaying ? null : (
+        <div
+          className={
+            " absolute top-0 left-0 w-full h-full flex flex-col gap-3 items-center justify-center bg-slate-500 rounded-lg bg-opacity-90 " +
+            (gridSize == 4 ? "scale-110" : "scale-105")
+          }
+        >
+          {isfirstPlay || (!startTime && !endTime) ? (
+            <>
+              <p className=" px-3">Click on the card to reveal its value</p>
+              <p className=" font-extrabold text-2xl">Start the game</p>
+            </>
+          ) : (
+            <p className=" px-3 text-nowrap font-bold">
+              Time took{" "}
+              <span className=" text-2xl">
+                {TimerText(endTime - startTime)}
+              </span>
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
