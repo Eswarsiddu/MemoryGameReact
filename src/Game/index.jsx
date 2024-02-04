@@ -25,9 +25,10 @@ import x from "../assets/images/x.jpg";
 import y from "../assets/images/y.jpg";
 import z from "../assets/images/z.jpg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import { STATES, ShuffelArray } from "../Constants";
+import { TimerText } from "../Timer";
 
 export const CHARACTERS = [
   { text: "a", image: a, value: nanoid() },
@@ -81,47 +82,36 @@ function GenerateGrid(gridSize) {
   return gridEle;
 }
 
-function Game({ isplaying, startTime, endGame, gridSize, setGridSize }) {
+function Game({
+  isplaying,
+  isfirstPlay,
+  endGame,
+  gridSize,
+  startTime,
+  endTime,
+}) {
   const [grid, setGrid] = useState(GenerateGrid(gridSize));
   const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    setGrid(GenerateGrid(gridSize));
+    setSelected([]);
+  }, [isplaying, gridSize]);
 
   const toalMatched = grid.filter((ele) => ele.state === STATES.MATCHED).length;
   if (toalMatched === grid.length) {
     endGame();
-    setGrid(GenerateGrid(gridSize));
   }
 
   // grid-cols-6 grid-cols-4
 
   return (
-    <div className=" container mx-auto max-w-max">
-      <div className=" flex items-center justify-between">
-        <button
-          className=" mb-2 rounded p-2 bg-green-400 text-black"
-          onClick={() => {
-            setGrid(GenerateGrid(gridSize));
-          }}
-        >
-          Reset Game
-        </button>
-        <div className="flex gap-2">
-          <label htmlFor="">Size</label>
-          <select
-            className=" text-black rounded px-1 bg-slate-300"
-            onChange={(event) => {
-              setGridSize(event.target.value);
-              setGrid(GenerateGrid(event.target.value));
-            }}
-          >
-            <option value="4">4</option>
-            <option value="6">6</option>
-          </select>
-        </div>
-      </div>
+    <div className=" container mx-auto max-w-max relative">
       <div className={"grid gap-2 " + `grid-cols-${gridSize}`}>
         {grid.map((ele, index) => {
           return (
             <Card
+              isdisabled={!isplaying}
               key={ele.value + index}
               ele={ele}
               index={index}
@@ -160,31 +150,59 @@ function Game({ isplaying, startTime, endGame, gridSize, setGridSize }) {
           );
         })}
       </div>
+      {isplaying ? null : (
+        <div
+          className={
+            " absolute top-0 left-0 w-full h-full flex flex-col gap-3 items-center justify-center bg-slate-500 rounded-lg bg-opacity-90 " +
+            (gridSize == 4 ? "scale-110" : "scale-105")
+          }
+        >
+          {isfirstPlay || (!startTime && !endTime) ? (
+            <>
+              <p className=" px-3">Click on the card to reveal its value</p>
+              <p className=" font-extrabold text-2xl">Start the game</p>
+            </>
+          ) : (
+            <p className=" px-3 text-nowrap font-bold">
+              Time took{" "}
+              <span className=" text-2xl">
+                {TimerText(endTime - startTime)}
+              </span>
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
 function GetCardSize(gridSize) {
-  let str = "w-14 h-14";
-  if (gridSize === 6) return "w-10 h-10";
+  let className = "w-16 h-16 text-3xl md:w-20 md:h-20 md:text-5xl";
+  if (gridSize == 6)
+    className = "w-12 h-12 text-2xl md:w-16 md:h-16 md:text-4xl";
 
-  return str;
+  return className;
 }
 
 function Card({
-  ele: { image, text, value, state },
+  ele: { image, text, state },
   index,
   handelClick,
   gridSize,
+  isdisabled,
 }) {
   const flipped = state !== STATES.BACK;
   return (
     <button
-      disabled={state === STATES.MATCHED}
+      disabled={state === STATES.MATCHED || isdisabled}
       id={"card-" + index}
       className={
         GetCardSize(gridSize) +
         " border rounded " +
+        (flipped
+          ? " bg-slate-300 capitalize text-black"
+          : "bg-slate-500 hover:bg-slate-400") +
+        " " +
         (state === STATES.MATCHED
           ? "border-orange-600 opacity-50"
           : "border-white")
@@ -196,11 +214,11 @@ function Card({
           {image ? (
             <img className="w-full rounded" src={image} alt="img" />
           ) : (
-            <p className=" text-3xl">{text}</p>
+            <p>{text}</p>
           )}
         </div>
       ) : (
-        <div>back</div>
+        <p className="text-white">?</p>
       )}
     </button>
   );
