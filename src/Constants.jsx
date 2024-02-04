@@ -4,4 +4,18 @@ export const STATES = {
   MATCHED: "matched",
 };
 
-export const ShuffelArray = (arr) => arr.sort(() => Math.random() - 0.5);
+// export const ShuffelArray = (arr) => arr.sort(() => Math.random() - 0.5);
+
+export const ShuffelArray = (arr) => {
+  const oldarr = [...arr];
+  const newArr = [];
+  while (oldarr.length) {
+    const index = Math.floor(Math.random() * oldarr.length);
+    newArr.push(oldarr[index]);
+    oldarr.splice(index, 1);
+  }
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = newArr[i];
+  }
+  return arr;
+};

@@ -37,7 +37,7 @@ function TripileDigit(num) {
   return num < 100 ? `0${DoubleDigit(num)}` : num;
 }
 
-function TimerText(time) {
+export function TimerText(time) {
   let text = "";
   let milliseconds = time % 1000;
   let seconds = Math.floor(time / 1000);
