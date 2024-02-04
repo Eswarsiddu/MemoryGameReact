@@ -94,10 +94,8 @@ function Game({
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    // if (isplaying) {
     setGrid(GenerateGrid(gridSize));
     setSelected([]);
-    // }
   }, [isplaying, gridSize]);
 
   const toalMatched = grid.filter((ele) => ele.state === STATES.MATCHED).length;
@@ -179,14 +177,15 @@ function Game({
 }
 
 function GetCardSize(gridSize) {
-  let str = "w-14 h-14";
-  if (gridSize === 6) return "w-10 h-10";
+  let className = "w-16 h-16 text-3xl md:w-20 md:h-20 md:text-5xl";
+  if (gridSize == 6)
+    className = "w-12 h-12 text-2xl md:w-16 md:h-16 md:text-4xl";
 
-  return str;
+  return className;
 }
 
 function Card({
-  ele: { image, text, value, state },
+  ele: { image, text, state },
   index,
   handelClick,
   gridSize,
@@ -200,6 +199,10 @@ function Card({
       className={
         GetCardSize(gridSize) +
         " border rounded " +
+        (flipped
+          ? " bg-slate-300 capitalize text-black"
+          : "bg-slate-500 hover:bg-slate-400") +
+        " " +
         (state === STATES.MATCHED
           ? "border-orange-600 opacity-50"
           : "border-white")
@@ -211,11 +214,11 @@ function Card({
           {image ? (
             <img className="w-full rounded" src={image} alt="img" />
           ) : (
-            <p className=" text-3xl">{text}</p>
+            <p>{text}</p>
           )}
         </div>
       ) : (
-        <div>back</div>
+        <p className="text-white">?</p>
       )}
     </button>
   );

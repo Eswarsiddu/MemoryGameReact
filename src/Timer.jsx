@@ -26,7 +26,11 @@ function Timer({ startTime = undefined, endTime = undefined, resetGame }) {
     return () => (interval ? clearInterval(interval) : null);
   }, [startTime, endTime]);
 
-  return <p className="w-[150px] text-center">{TimerText(time)}</p>;
+  return (
+    <p className="w-[150px] md:w-[180px] text-center md:text-xl">
+      {TimerText(time)}
+    </p>
+  );
 }
 
 function DoubleDigit(num) {
@@ -43,19 +47,17 @@ export function TimerText(time) {
   let seconds = Math.floor(time / 1000);
   let minutes = Math.floor(seconds / 60);
   let hours = Math.floor(minutes / 60);
-  console.log("timer", milliseconds);
+
   if (hours) {
     text += `${DoubleDigit(hours)}:`;
   }
+
   if (minutes) {
     text += `${DoubleDigit(minutes)}:`;
   }
-  //   if (seconds) {
+
   text += `${DoubleDigit(seconds)}:`;
-  //   }
-  //   if (milliseconds) {
   text += `${TripileDigit(milliseconds)}`;
-  //   }
   return text;
 }
 
