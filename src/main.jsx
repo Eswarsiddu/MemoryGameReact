@@ -5,7 +5,6 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <h1 className=" text-center text-4xl mt-3 mb-8">Memory game</h1>
     <App />
   </React.StrictMode>
 );
