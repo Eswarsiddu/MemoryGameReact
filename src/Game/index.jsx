@@ -25,7 +25,7 @@ import x from "../assets/images/x.jpg";
 import y from "../assets/images/y.jpg";
 import z from "../assets/images/z.jpg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import { STATES, ShuffelArray } from "../Constants";
 
@@ -81,47 +81,31 @@ function GenerateGrid(gridSize) {
   return gridEle;
 }
 
-function Game({ isplaying, startTime, endGame, gridSize, setGridSize }) {
+function Game({ isplaying, endGame, gridSize }) {
   const [grid, setGrid] = useState(GenerateGrid(gridSize));
   const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    // if (isplaying) {
+    setGrid(GenerateGrid(gridSize));
+    setSelected([]);
+    // }
+  }, [isplaying, gridSize]);
 
   const toalMatched = grid.filter((ele) => ele.state === STATES.MATCHED).length;
   if (toalMatched === grid.length) {
     endGame();
-    setGrid(GenerateGrid(gridSize));
   }
 
   // grid-cols-6 grid-cols-4
 
   return (
     <div className=" container mx-auto max-w-max">
-      <div className=" flex items-center justify-between">
-        <button
-          className=" mb-2 rounded p-2 bg-green-400 text-black"
-          onClick={() => {
-            setGrid(GenerateGrid(gridSize));
-          }}
-        >
-          Reset Game
-        </button>
-        <div className="flex gap-2">
-          <label htmlFor="">Size</label>
-          <select
-            className=" text-black rounded px-1 bg-slate-300"
-            onChange={(event) => {
-              setGridSize(event.target.value);
-              setGrid(GenerateGrid(event.target.value));
-            }}
-          >
-            <option value="4">4</option>
-            <option value="6">6</option>
-          </select>
-        </div>
-      </div>
       <div className={"grid gap-2 " + `grid-cols-${gridSize}`}>
         {grid.map((ele, index) => {
           return (
             <Card
+              isdisabled={!isplaying}
               key={ele.value + index}
               ele={ele}
               index={index}
@@ -176,11 +160,12 @@ function Card({
   index,
   handelClick,
   gridSize,
+  isdisabled,
 }) {
   const flipped = state !== STATES.BACK;
   return (
     <button
-      disabled={state === STATES.MATCHED}
+      disabled={state === STATES.MATCHED || isdisabled}
       id={"card-" + index}
       className={
         GetCardSize(gridSize) +
