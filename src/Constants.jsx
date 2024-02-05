@@ -19,3 +19,11 @@ export const ShuffelArray = (arr) => {
   }
   return arr;
 };
+
+export function DoubleDigit(num) {
+  return num < 10 ? `0${num}` : num;
+}
+
+export function TripileDigit(num) {
+  return num < 100 ? `0${DoubleDigit(num)}` : num;
+}

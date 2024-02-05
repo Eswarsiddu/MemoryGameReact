@@ -27,8 +27,8 @@ import z from "../assets/images/z.jpg";
 
 import { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import { STATES, ShuffelArray } from "../Constants";
-import { TimerText } from "../Timer";
+import { DoubleDigit, STATES, ShuffelArray, TripileDigit } from "../Constants";
+// import { TimerText } from "../Timer";
 
 export const CHARACTERS = [
   { text: "a", image: a, value: nanoid() },
@@ -101,6 +101,7 @@ function Game({
   const toalMatched = grid.filter((ele) => ele.state === STATES.MATCHED).length;
   if (toalMatched === grid.length) {
     endGame();
+    setGrid(GenerateGrid(gridSize));
   }
 
   // grid-cols-6 grid-cols-4
@@ -226,3 +227,11 @@ function Card({
 }
 
 export default Game;
+
+function TimerText(time) {
+  const milliseconds = TripileDigit(time % 1000);
+  let seconds = DoubleDigit(Math.floor(time / 1000) % 60);
+  let minutes = DoubleDigit(Math.floor(time / 60000) % 60);
+
+  return `${minutes}:${seconds}:${milliseconds}`;
+}

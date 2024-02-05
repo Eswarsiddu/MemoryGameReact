@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
+import { DoubleDigit, TripileDigit } from "./Constants";
 
 function Timer({ startTime = undefined, endTime = undefined, resetGame }) {
   const currentTime = Date.now();
   const [time, setTime] = React.useState(
     endTime ? endTime - startTime : startTime ? currentTime - startTime : 0
   );
-  if (time > 5400000) {
+  if (time > 3600000) {
     resetGame();
   }
   useEffect(() => {
@@ -26,39 +27,21 @@ function Timer({ startTime = undefined, endTime = undefined, resetGame }) {
     return () => (interval ? clearInterval(interval) : null);
   }, [startTime, endTime]);
 
+  const milliseconds = TripileDigit(time % 1000);
+  let seconds = DoubleDigit(Math.floor(time / 1000) % 60);
+  let minutes = DoubleDigit(Math.floor(time / 60000) % 60);
+
   return (
-    <p className="w-[150px] md:w-[180px] text-center md:text-xl">
-      {TimerText(time)}
+    // <p className=" text-center md:text-xl">
+    <p className="w-[180px] md:w-[180px] md:text-xl flex justify-evenly px-6">
+      <span className="w-[27px]">{minutes}</span>
+      <span>:</span>
+      <span className="w-[27px]">{seconds}</span>
+      <span>:</span>
+      <span className="w-[38px]">{milliseconds}</span>
     </p>
+    // </p>
   );
-}
-
-function DoubleDigit(num) {
-  return num < 10 ? `0${num}` : num;
-}
-
-function TripileDigit(num) {
-  return num < 100 ? `0${DoubleDigit(num)}` : num;
-}
-
-export function TimerText(time) {
-  let text = "";
-  let milliseconds = time % 1000;
-  let seconds = Math.floor(time / 1000);
-  let minutes = Math.floor(seconds / 60);
-  let hours = Math.floor(minutes / 60);
-
-  if (hours) {
-    text += `${DoubleDigit(hours)}:`;
-  }
-
-  if (minutes) {
-    text += `${DoubleDigit(minutes % 60)}:`;
-  }
-
-  text += `${DoubleDigit(seconds % 60)}:`;
-  text += `${TripileDigit(milliseconds)}`;
-  return text;
 }
 
 export default Timer;
