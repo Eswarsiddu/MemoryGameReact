@@ -53,10 +53,10 @@ export function TimerText(time) {
   }
 
   if (minutes) {
-    text += `${DoubleDigit(minutes)}:`;
+    text += `${DoubleDigit(minutes % 60)}:`;
   }
 
-  text += `${DoubleDigit(seconds)}:`;
+  text += `${DoubleDigit(seconds % 60)}:`;
   text += `${TripileDigit(milliseconds)}`;
   return text;
 }
