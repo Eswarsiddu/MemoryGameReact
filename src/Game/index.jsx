@@ -133,6 +133,7 @@ function Game({
                         newGrid[index].state = STATES.MATCHED;
                         setSelected([]);
                       } else {
+                        ``;
                         setSelected((prev) => [...prev, index]);
                       }
                     } else {

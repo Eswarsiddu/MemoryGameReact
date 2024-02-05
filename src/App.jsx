@@ -30,7 +30,7 @@ function App() {
     <>
       <h1
         className={
-          " text-center text-4xl mt-3 md:mb-6 " +
+          " text-center text-4xl mt-1 md:mb-6 " +
           (gridSize == 4 ? "mb-3" : "mb-1")
         }
       >
@@ -39,7 +39,7 @@ function App() {
       <div
         className={
           "container mx-auto max-w-max flex items-center md:mb-6 " +
-          (gridSize == 4 ? "mb-3" : "mb-1")
+          (gridSize == 4 ? "mb-6" : "mb-4")
         }
       >
         <button
